@@ -1,0 +1,35 @@
+:root {
+  --black: #29292e;
+  --shadow: #050206;
+  --Purple: #835afd;
+  --Gradient: linear-gradient(139.44deg, #485bff 0%, #ff59f8 96.19%);
+  --Danger: #e73f5d;
+  --Gray-Dark: #737380;
+  --Gray-Medium: #a8a8b3;
+  --Gray-Light: #dbdcdd;
+  --White-Background: #f8f8f8;
+  --White-Details: #fefefe;
+  --Pink-Dark: #e559f9;
+  --Pink-Light: #d67ee2;
+  --Hover-Purple: #6f4bd8;
+  --Hover-Danger: #d73754;
+  --Hover-Gray-Medium: #7e7e86;
+  --Hover-Gray-Light: #cecece;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--White-Background);
+  color: var(--black);
+}
+
+body,
+input,
+button,
+textarea {
+  font: 400 16px "Roboto", sans-serief;
+}

@@ -1,19 +1,11 @@
-import { useState } from "react";
+import { ButtonHTMLAttributes } from "react";
+// importado para que eu possa usar nas props do elemento, como eu quero passar todas a propriedades 
+// de um elemento button Html, eu uso seus atributos
 
-export const Button = () => {
-    const [counter, setCounter] = useState(0);
+import "../styles/button.scss";
 
-    const handleClick = (e: any) => {
-        if (e.shiftKey){
-            setCounter(prev =>prev > 0? prev - 1: prev);
-        }else if(e.ctrlKey){
-            setCounter(0);
-        }else{
-            setCounter(prev => prev + 1);
-        }
-    }
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-    return (
-        <button onClick={handleClick}>{counter}</button>
-    );
-}
+export const Button = (props: ButtonProps) => {
+  return <button {...props} className="button" />;
+};

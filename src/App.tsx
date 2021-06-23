@@ -1,15 +1,22 @@
-import {Button} from './components/Button';
+import { BrowserRouter, Route } from "react-router-dom";
+
+import { Home } from "./pages/Home";
+import { NewRoom } from "./pages/NewRoom";
+
+//Componente que regula e tem todas as funções do contexto de autentificação
+import { AuthContextProvider } from "./contexts/AuthContext";
 
 function App() {
+
   return (
-    <div className="foo">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam rem nihil magni voluptatem vitae molestiae maxime laudantium aut consectetur, mollitia, unde illum cumque laboriosam porro id saepe rerum, esse aliquid!</p>
-      <Button />
-      <Button />
-      <Button />
-      <Button />
-      <Button />
-    </div>
+		// context provider
+    <AuthContextProvider>
+			{/* router provider */}
+      <BrowserRouter>
+        <Route path="/" exact component={Home} />
+        <Route path="/roons/new" component={NewRoom} />
+      </BrowserRouter>
+    </AuthContextProvider>
   );
 }
 
