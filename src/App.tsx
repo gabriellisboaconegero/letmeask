@@ -11,7 +11,7 @@ function App() {
   return (
 		// context provider
     <AuthContextProvider>
-			{/* router provider */}
+			{/* router */}
       <BrowserRouter>
         <Route path="/" exact component={Home} />
         <Route path="/roons/new" component={NewRoom} />

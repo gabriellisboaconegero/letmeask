@@ -35,12 +35,38 @@
 
   main {
     flex: 8;
+    position: relative;
 
     padding: 0 32px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+
+    .exit{
+      // display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 10px; 
+
+      button{
+        font-size: 14px;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        background: var(--Danger);
+        padding: 5px;
+        cursor: pointer;
+
+        transition: background 0.2s;
+
+        &:hover{
+          background: var(--Hover-Danger);
+        }
+      }
+    }
 
     .main-content {
       display: flex;

@@ -20,6 +20,7 @@ export function Home() {
   const { user, signInWithGoogle } = useAuth();
 
   async function handleCreateRoom() {
+
     if (!user) {
       await signInWithGoogle();
     }

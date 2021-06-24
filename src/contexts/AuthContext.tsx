@@ -19,6 +19,7 @@ type User = {
 type AuthContextType = {
   	user: User | undefined;
   	signInWithGoogle: () => Promise<void>;
+    signOut: () => Promise<void>;
 };
 
 // como colocamos em um arquivo diferente para ficar melhor de refatorar, monitorar 
@@ -47,9 +48,9 @@ export function AuthContextProvider(props: AuthContextProviderProps){
     //                  esse eventListner verifica se o usuario ja
     //                  tinha se cadastrado alguma
     //                  outra vez no app
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        const { displayName, photoURL, uid } = user;
+    const unsubscribe = auth.onAuthStateChanged((changedUser) => {
+      if (changedUser) {
+        const { displayName, photoURL, uid } = changedUser;
 
         if (!displayName || !photoURL) {
           throw new Error("Missing information from Google Account");
@@ -60,6 +61,8 @@ export function AuthContextProvider(props: AuthContextProviderProps){
           name: displayName,
           avatar: photoURL,
         });
+      }else{
+        setUser(undefined);
       }
     });
 
@@ -90,11 +93,16 @@ export function AuthContextProvider(props: AuthContextProviderProps){
       });
     }
   }
+
+  async function signOut(){
+    await auth.signOut();
+  }
+
   return (
     // componente do contexto, veja o que é passado no contexto
     // o user, e a função para logIn, pois eles serão necessarios em 
     // outros componentes da aplicação
-    <AuthContext.Provider value={{ user, signInWithGoogle }}>
+    <AuthContext.Provider value={{ user, signInWithGoogle, signOut }}>
       {props.children}
     </AuthContext.Provider>
 
