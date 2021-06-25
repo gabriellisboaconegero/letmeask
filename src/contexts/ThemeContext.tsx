@@ -1,14 +1,12 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import { createContext, ReactNode } from "react";
+import { useEffect, createContext, ReactNode, useState } from "react";
 
-type Theme = 'light' | 'dark'| 'solarized';
+export type Theme = 'light' | 'dark'| 'solarized';
 type ThemeProviderProps = {
   children: ReactNode;
 }
 type ThemeContextType = {
   theme: Theme,
-  toggleTheme: () => void
+  setTheme: (theme:Theme) => void
 }
 
 function setDocumentVariableTheme(theme: Theme){
@@ -29,12 +27,8 @@ export function ThemeContextProvider(props: ThemeProviderProps){
     setDocumentVariableTheme(theme);
   }, [theme]);
 
-  function toggleTheme(){
-    setTheme(prev => prev === 'light'? 'dark': "light");  
-  }
-
   return (
-    <ThemeContext.Provider value={{theme, toggleTheme}}>
+    <ThemeContext.Provider value={{theme, setTheme}}>
       <div className={theme}>
         {props.children}
       </div>

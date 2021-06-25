@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 //hook do sistema de rotas que permite setar qual vai ser a proxima rota
 import { useHistory } from "react-router-dom";
@@ -18,12 +18,14 @@ import { useTheme } from "../hooks/useTheme";
 
 import { database } from "../services/firebase";
 
+import { Theme } from "../contexts/ThemeContext";
+
 export function Home() {
   const history = useHistory();
 
   const [roomCode, setRoomCode] = useState("");
 
-  const {theme, toggleTheme} = useTheme();
+  const {theme, setTheme} = useTheme();
   //exemplo de como funciona o useAuth, ele retorna os dados que podemos acessar do contexto
   const { user, signInWithGoogle } = useAuth();
 
@@ -54,6 +56,10 @@ export function Home() {
     history.push(`rooms/${roomCode}`);
   }
 
+  function handleSelectedTheme(e: ChangeEvent<HTMLSelectElement>){
+    setTheme(e.target.value as Theme);
+  }
+
   return (
     <div id="page-auth">
       <aside>
@@ -65,7 +71,11 @@ export function Home() {
       <main>
         <div className="main-content">
           <h1>{theme}</h1>
-          <button onClick={toggleTheme}>Mudar tema</button>
+          <select name="theme" id="theme" onChange={handleSelectedTheme} defaultValue={theme}>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="solarized">Solarized</option>
+          </select>
           <img src={logoImg} alt="Letmeask" />
           <button className="create-room" onClick={handleCreateRoom}>
             <img src={googleIcon} alt="Google icon" />
