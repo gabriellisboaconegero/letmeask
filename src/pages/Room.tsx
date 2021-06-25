@@ -51,7 +51,7 @@ export function Room() {
   const params = useParams<RoomParams>();
   const roomId = params.id;
 
-  const { user } = useAuth();
+  const { user, signInWithGoogle } = useAuth();
   const [newQuestion, setNewQuestion] = useState("");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [title, setTitle] = useState('');
@@ -112,6 +112,10 @@ export function Room() {
     setNewQuestion("");
   }
 
+  async function signInFromRoom(){
+    await signInWithGoogle();
+  }
+
   return (
     <div id="page-room">
       <header>
@@ -142,7 +146,7 @@ export function Room() {
             {/* se n tiver user não mostra as user-info e mostra o login */}
             {!user ? (
               <span>
-                par enviar pergunta, <button>faça seu login</button>
+                par enviar pergunta, <button onClick={signInFromRoom}>faça seu login</button>
               </span>
             ) : (
               <div className="user-info">
