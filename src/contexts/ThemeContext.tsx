@@ -1,7 +1,8 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import { createContext, ReactNode } from "react";
 
-type Theme = 'light' | 'dark';
+type Theme = 'light' | 'dark'| 'solarized';
 type ThemeProviderProps = {
   children: ReactNode;
 }
@@ -10,19 +11,26 @@ type ThemeContextType = {
   toggleTheme: () => void
 }
 
+function setDocumentVariableTheme(theme: Theme){
+  document.documentElement.setAttribute('data-theme', theme);
+}
+
 export const ThemeContext = createContext<ThemeContextType>({} as ThemeContextType);
 
 export function ThemeContextProvider(props: ThemeProviderProps){
 
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>(() => {
+    const storageTheme = (window.localStorage.getItem('letmeask_theme') ?? 'light') as Theme;
+    return storageTheme;
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem('letmeask_theme', theme);
+    setDocumentVariableTheme(theme);
+  }, [theme]);
 
   function toggleTheme(){
-    setTheme(prev => {
-      const newTheme = prev === 'light'? 'dark': "light";
-      document.documentElement.setAttribute('data-theme', newTheme);
-      return newTheme;
-    });
-    
+    setTheme(prev => prev === 'light'? 'dark': "light");  
   }
 
   return (

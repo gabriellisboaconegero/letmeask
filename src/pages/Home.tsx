@@ -22,8 +22,8 @@ export function Home() {
   const history = useHistory();
 
   const [roomCode, setRoomCode] = useState("");
-  const {theme, toggleTheme} = useTheme();
 
+  const {theme, toggleTheme} = useTheme();
   //exemplo de como funciona o useAuth, ele retorna os dados que podemos acessar do contexto
   const { user, signInWithGoogle } = useAuth();
 
