@@ -14,6 +14,7 @@ import "../styles/auth.scss";
 import { Button } from "../components/Button";
 
 import { useAuth } from "../hooks/UseAuth";
+import { useTheme } from "../hooks/useTheme";
 
 import { database } from "../services/firebase";
 
@@ -21,6 +22,7 @@ export function Home() {
   const history = useHistory();
 
   const [roomCode, setRoomCode] = useState("");
+  const {theme, toggleTheme} = useTheme();
 
   //exemplo de como funciona o useAuth, ele retorna os dados que podemos acessar do contexto
   const { user, signInWithGoogle } = useAuth();
@@ -62,6 +64,8 @@ export function Home() {
       </aside>
       <main>
         <div className="main-content">
+          <h1>{theme}</h1>
+          <button onClick={toggleTheme}>Mudar tema</button>
           <img src={logoImg} alt="Letmeask" />
           <button className="create-room" onClick={handleCreateRoom}>
             <img src={googleIcon} alt="Google icon" />

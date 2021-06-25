@@ -128,7 +128,6 @@ export function Room() {
           {questions.length > 0 && (
             <span>{questions.length} pergunta(s)</span>
           )}
-          
         </div>
 
         <form onSubmit={handleCreateNewQuestion}>
