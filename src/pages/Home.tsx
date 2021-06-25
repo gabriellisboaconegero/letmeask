@@ -1,3 +1,5 @@
+import { FormEvent, useState } from "react";
+
 //hook do sistema de rotas que permite setar qual vai ser a proxima rota
 import { useHistory } from "react-router-dom";
 
@@ -13,20 +15,41 @@ import { Button } from "../components/Button";
 
 import { useAuth } from "../hooks/UseAuth";
 
+import { database } from "../services/firebase";
+
 export function Home() {
   const history = useHistory();
+
+  const [roomCode, setRoomCode] = useState("");
 
   //exemplo de como funciona o useAuth, ele retorna os dados que podemos acessar do contexto
   const { user, signInWithGoogle } = useAuth();
 
   async function handleCreateRoom() {
-
     if (!user) {
       await signInWithGoogle();
     }
 
     //atualiza a rota
-    history.push("/roons/new");
+    history.push("/rooms/new");
+  }
+
+  // verifica se a sala existe antes de entrar nela
+  async function handleJoinRoom(e: FormEvent) {
+    e.preventDefault();
+
+    if (roomCode.trim() === ''){
+      return
+    }
+    
+    const roomRef = await database.ref(`rooms/${roomCode}`).get();
+
+    if (!roomRef.exists()){
+      alert('sala não existe');
+      return;
+    }
+
+    history.push(`rooms/${roomCode}`);
   }
 
   return (
@@ -45,8 +68,13 @@ export function Home() {
             Crie sua sala com Google
           </button>
           <div className="separator">ou entre em uma sala</div>
-          <form>
-            <input type="text" placeholder="Digite o código de sala" />
+          <form onSubmit={handleJoinRoom}>
+            <input 
+              type="text"  
+              placeholder="Digite o código de sala"
+              value={roomCode}
+              onChange={e => setRoomCode(e.target.value)}
+            />
             <Button type="submit">Entrar na sala</Button>
           </form>
         </div>
