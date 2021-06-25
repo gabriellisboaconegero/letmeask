@@ -65,7 +65,7 @@ export function Room() {
       //  o .val() retorna apenas o conteudo do database
       // diferente do .get() que pega outras coisas tambem
       const databaseRoom: DatabaseRoom = room.val();
-      const firebaseQuestions = databaseRoom.questions;
+      const firebaseQuestions = databaseRoom.questions ?? {};
 
       //  como o valor é retornado como objeto com os ids como keys dos objetos
       // ele não vem em um lista, então precisamos mudar isso
