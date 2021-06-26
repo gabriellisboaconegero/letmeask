@@ -48,7 +48,7 @@ export function NewRoom() {
     });
 
     // key é o id que o firebase usa para indentificar cada dado
-    history.push(`/rooms/${firebaseRoom.key}`);
+    history.push(`/adimin/rooms/${firebaseRoom.key}`);
   }
   //#endregion
 

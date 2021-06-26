@@ -1,17 +1,17 @@
-import { useState, FormEvent } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import logoImg from "../assets/images/logo.svg";
+import deleteImg from "../assets/images/delete.svg";
 
 import { Button } from "../components/Button";
 import { Question } from "../components/Question";
 import { RoomCode } from "../components/RoomCode";
 
 import { useRoom } from "../hooks/useRoom";
-import { database } from "../services/firebase";
 
 
 import "../styles/room.scss";
+import { database } from "../services/firebase";
 
 type RoomParams = {
   id: string;
@@ -22,6 +22,22 @@ export function AdmRoom() {
   const params = useParams<RoomParams>();
   const roomId = params.id;
   const { questions, title, user } = useRoom(roomId);
+  const history = useHistory();
+
+  async function handleDeleteQuestion(questId: string){
+    if (window.confirm("Tem certeza que deseja excluir essa pergunta")){
+      const questRef = database.ref(`rooms/${roomId}/questions/${questId}`)
+
+      await questRef.remove();
+    }
+  }
+
+  async function handleCloseRoom(){
+    await database.ref(`rooms/${roomId}`).update({
+      endedAt: new Date()
+    });
+    history.push('/');
+  }
 
   return (
     <div id="page-room">
@@ -30,7 +46,10 @@ export function AdmRoom() {
           <img src={logoImg} alt="Letmeask" />
           <div className="">
             <RoomCode roomCode={roomId}></RoomCode>
-            <Button isOutlined>Encerrar Sala</Button>
+            <Button 
+              isOutlined
+              onClick={handleCloseRoom}
+            >Encerrar Sala</Button>
           </div>
         </div>
       </header>
@@ -49,7 +68,12 @@ export function AdmRoom() {
               content={quest.context}
               author={quest.author}
             >
-
+              <button
+                type="button"
+                onClick={e => handleDeleteQuestion(quest.id)}
+              >
+                <img src={deleteImg} alt="Delete question" />
+              </button>
             </Question>
           ))}
         </div>
