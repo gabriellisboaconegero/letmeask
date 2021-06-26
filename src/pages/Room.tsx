@@ -1,14 +1,15 @@
-import { FormEvent, useState, useEffect } from "react";
+import { useState, FormEvent } from "react";
 import { useParams } from "react-router-dom";
 
 import logoImg from "../assets/images/logo.svg";
 
 import { Button } from "../components/Button";
+import { Question } from "../components/Question";
 import { RoomCode } from "../components/RoomCode";
 
-import { useAuth } from "../hooks/UseAuth";
-
+import { useRoom } from "../hooks/useRoom";
 import { database } from "../services/firebase";
+
 
 import "../styles/room.scss";
 
@@ -16,75 +17,12 @@ type RoomParams = {
   id: string;
 };
 
-// o record quer dizer um objeto
-// esse objeto vai ter uma key em formato de string e um valor do colocado
-type FirebaseQuestions = Record<string, {
-  author: {
-    name: string,
-    avatar: string
-  },
-  context: string,
-  isAnswered: boolean,
-  isHighlghted: boolean
-}>;
-
-type Question = {
-  id: string,
-  author: {
-    name: string,
-    avatar: string
-  },
-  context: string,
-  isAnswered: boolean,
-  isHighlghted: boolean,
-}
-
-type DatabaseRoom = {
-  authorId: string,
-  questions: FirebaseQuestions,
-  title: string
-}
-
 export function Room() {
-
   // pega os parametros que foram passados na rota, nesse cado o id da sala
   const params = useParams<RoomParams>();
   const roomId = params.id;
-
-  const { user, signInWithGoogle } = useAuth();
-  const [newQuestion, setNewQuestion] = useState("");
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [title, setTitle] = useState('');
-
-  useEffect(() => {
-    // pega a ref da sala para poder adicionar e modificar
-    const roomRef = database.ref(`rooms/${roomId}`);
-
-    // event listner que chama a fução toda vez que ocorre uma mudança no database
-    roomRef.on("value", (room) => {
-      //  o .val() retorna apenas o conteudo do database
-      // diferente do .get() que pega outras coisas tambem
-      const databaseRoom: DatabaseRoom = room.val();
-      const firebaseQuestions = databaseRoom.questions ?? {};
-
-      //  como o valor é retornado como objeto com os ids como keys dos objetos
-      // ele não vem em um lista, então precisamos mudar isso
-      // pega os dois valores, e coloca em uma lista assim Array<[key, value]>
-      // e depois usa map para tornar uma lista só com id
-      const parsedQuestions = Object.entries(firebaseQuestions).map(([id, value]) => {
-        return {
-          id,
-          context: value.context,
-          author: value.author,
-          isAnswered: value.isAnswered,
-          isHighlghted: value.isHighlghted
-        }
-      });
-
-      setTitle(databaseRoom.title);
-      setQuestions(parsedQuestions);
-    });
-  }, [roomId]);
+  const [newQuestion, setNewQuestion] = useState('');
+  const { questions, title, user, signInWithGoogle } = useRoom(roomId);
 
   async function handleCreateNewQuestion(e: FormEvent) {
     e.preventDefault();
@@ -105,6 +43,7 @@ export function Room() {
       },
       isHighlghted: false,
       isAnswered: false,
+      likes: 0
     };
 
     // envia a pergunta para se adicionada à haba de perguntas da sala
@@ -112,8 +51,15 @@ export function Room() {
     setNewQuestion("");
   }
 
-  async function signInFromRoom(){
+  async function signInFromRoom() {
     await signInWithGoogle();
+  }
+
+  async function handlelikes(questId: string){
+    const questRef = database.ref(`/rooms/${roomId}/questions/${questId}`);
+
+    const a = await questRef.get();
+    console.log(a.val());
   }
 
   return (
@@ -129,10 +75,7 @@ export function Room() {
         <div className="room-title">
           <h1>Sala {title}</h1>
           {/* se não tiver pergunta não mostra quantas perguntas tem */}
-          {questions.length > 0 && (
-            <span>{questions.length} pergunta(s)</span>
-          )}
-          
+          {questions.length > 0 && <span>{questions.length} pergunta(s)</span>}
         </div>
 
         <form onSubmit={handleCreateNewQuestion}>
@@ -146,7 +89,8 @@ export function Room() {
             {/* se n tiver user não mostra as user-info e mostra o login */}
             {!user ? (
               <span>
-                par enviar pergunta, <button onClick={signInFromRoom}>faça seu login</button>
+                par enviar pergunta,{" "}
+                <button onClick={signInFromRoom}>faça seu login</button>
               </span>
             ) : (
               <div className="user-info">
@@ -159,13 +103,17 @@ export function Room() {
             </Button>
           </div>
         </form>
-        {questions.map(quest => (
-          <div>
-            <p>{quest.context}</p>
-            <p>{quest.author.name}</p>
-            <br />
-          </div>
-        ))}
+
+        <div className="question-list">
+          {questions.map((quest) => (
+            <Question 
+              key={quest.id}
+              content={quest.context}
+              author={quest.author}
+            >
+            </Question>
+          ))}
+        </div>
       </main>
     </div>
   );
