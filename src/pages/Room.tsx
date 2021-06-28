@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import { useState, FormEvent } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import logoImg from "../assets/images/logo.svg";
 
@@ -21,7 +22,16 @@ export function Room() {
   const params = useParams<RoomParams>();
   const roomId = params.id;
   const [newQuestion, setNewQuestion] = useState("");
-  const { questions, title, user, signInWithGoogle } = useRoom(roomId);
+  const { questions, title, user, signInWithGoogle, authorId } = useRoom(roomId);
+  const history = useHistory();
+
+  // Ao entrar na pagina ou logar de dentro dela, vai verificar se o usuario é 
+  // O criador e colocar ele na sala de adm
+  useEffect(() => {
+    if (user?.id === authorId){
+      history.push(`/adimin/rooms/${roomId}`);
+    }
+  }, [roomId, user?.id, authorId, history]);
 
   async function handleCreateNewQuestion(e: FormEvent) {
     e.preventDefault();
@@ -67,9 +77,6 @@ export function Room() {
         authorId: user?.id,
       });
     }
-    
-
-
   }
 
   return (

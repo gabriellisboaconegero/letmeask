@@ -43,6 +43,7 @@ export function useRoom(roomId: string) {
   const { user, signInWithGoogle } = useAuth();
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [title, setTitle] = useState("");
+  const [authorId, setAuthorId] = useState('');
 
   useEffect(() => {
     // pega a ref da sala para poder adicionar e modificar
@@ -54,6 +55,7 @@ export function useRoom(roomId: string) {
       // diferente do .get() que pega outras coisas tambem
       const databaseRoom: DatabaseRoom = room.val();
       const firebaseQuestions = databaseRoom.questions ?? {};
+      const databaseAuthorId = databaseRoom.authorId;
 
       //  como o valor é retornado como objeto com os ids como keys dos objetos
       // ele não vem em um lista, então precisamos mudar isso
@@ -77,6 +79,7 @@ export function useRoom(roomId: string) {
 
       setTitle(databaseRoom.title);
       setQuestions(parsedQuestions);
+      setAuthorId(databaseAuthorId);
     });
 
     return () => {
@@ -88,6 +91,7 @@ export function useRoom(roomId: string) {
     questions,
     title,
     user,
-    signInWithGoogle
+    signInWithGoogle,
+    authorId
   };
 }

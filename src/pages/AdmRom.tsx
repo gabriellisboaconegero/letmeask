@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { useParams, useHistory } from "react-router-dom";
 
 import logoImg from "../assets/images/logo.svg";
@@ -11,8 +13,8 @@ import { RoomCode } from "../components/RoomCode";
 
 import { useRoom } from "../hooks/useRoom";
 
-
 import "../styles/room.scss";
+
 import { database } from "../services/firebase";
 
 type RoomParams = {
@@ -23,8 +25,22 @@ export function AdmRoom() {
   // pega os parametros que foram passados na rota, nesse cado o id da sala
   const params = useParams<RoomParams>();
   const roomId = params.id;
-  const { questions, title, user } = useRoom(roomId);
+  const { questions, title, user, authorId } = useRoom(roomId);
   const history = useHistory();
+
+  // Verifica se quem entrou é o adm
+  // se não coloca ele na sala normal 
+  useEffect(() => {
+    // como ao recarregar a pagina ou entrar nela o usuario em primeira instancia é undefined
+    // e o authorId tbm, eu preciso fazer a verificação apenas depois dos dois serem settados
+    // porem como pode ser que o user n tenha nada, uso só o authorId como parametro
+    // Pois ele carrega depois do user, ou seja sem tem authorId, écerteza que o valor de user n vai mais mudar
+    if (authorId){
+      if (user?.id !== authorId){
+        history.push(`/rooms/${roomId}`);
+      }
+    }
+  }, [authorId, user?.id, roomId, history]);
 
   async function handleDeleteQuestion(questId: string){
     if (window.confirm("Tem certeza que deseja excluir essa pergunta")){
@@ -47,9 +63,9 @@ export function AdmRoom() {
       endedAt: new Date()
     });
     history.push('/');
-  }
+  };
 
-  return (
+  return authorId ? (
     <div id="page-room">
       <header>
         <div className="content">
@@ -66,7 +82,7 @@ export function AdmRoom() {
 
       <main>
         <div className="room-title">
-          <h1>Sala {title}</h1>
+          <h1>{title}</h1>
           {/* se não tiver pergunta não mostra quantas perguntas tem */}
           {questions.length > 0 && <span>{questions.length} pergunta(s)</span>}
         </div>
@@ -105,6 +121,10 @@ export function AdmRoom() {
           ))}
         </div>
       </main>
+    </div>
+  ): (
+    <div className="loading">
+      Loading...
     </div>
   );
 }
