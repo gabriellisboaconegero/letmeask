@@ -8,6 +8,7 @@ import { AdmRoom } from "./pages/AdmRom";
 
 //Componente que regula e tem todas as funções do contexto de autentificação
 import { AuthContextProvider } from "./contexts/AuthContext";
+import { Menu } from "./components/Menu";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path='/rooms/:id' component={Room}></Route>
           <Route path='/adimin/rooms/:id' component={AdmRoom}></Route>
         </Switch>
+        <Menu />
       </BrowserRouter>
     </AuthContextProvider>
   );

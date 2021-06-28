@@ -1,0 +1,137 @@
+menu {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+
+  button{
+    border: none;
+    background: none;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .no-user{
+    width: 200px;
+    height: 50px;
+
+    background: var(--Gray-Light);
+    border: 2px solid var(--Purple);
+    border-radius: 16px;
+
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+
+    position: absolute;
+    top: 50%;
+    left: 45px;
+
+    transform-origin: 0% 50%;
+    transform: rotateY(90deg) translateY(-50%);
+
+    transition: transform 0.2s ease-in;
+
+    &.active{
+      transform: rotateY(0) translateY(-50%);
+    }
+
+
+    button{
+      color: var(--Purple);
+      text-decoration: underline;
+      font-size: 14px;
+    }
+  }
+
+  .menu{
+    min-width: 20vw;
+    min-height: 40vh;
+
+    background: var(--Gray-Light);
+    border: 2px solid var(--Purple);
+    border-radius: 16px;
+
+    position: absolute;
+    top: 50%;
+    left: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px 30px;
+
+    transform-origin: 0% 50%;
+    transform: rotateY(90deg) translateY(-50%);
+
+    transition: transform 0.2s ease-in;
+
+    &.active{
+      transform: rotateY(0) translateY(-50%);
+    }
+
+    header{
+      width: 100%;
+      flex: 3;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      > div{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 16px;
+
+        span:last-child{
+          font-size: 14px;
+          font-weight: 200;
+        }
+      }
+
+      img {
+        width: 56px;
+        height: 56px;
+        flex-flow: row;
+        border-radius: 50%;
+      }
+    }
+
+    main{
+      flex: 7;
+      width: 100%;
+      padding: 16px 0;
+
+      .menu-opt{
+        padding: 12px 0;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        transition: 0.2s;
+
+        &:hover{
+          background: var(--Hover-Gray-Light);
+        }
+
+        &.exit{
+          svg{
+            width: 26px;
+            margin-right: 10px;
+          }
+
+          &:hover{
+            svg path{
+              stroke: red;
+              fill: red;
+            }
+          }
+        }
+      }
+    }
+  }
+}
