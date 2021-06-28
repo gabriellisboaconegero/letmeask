@@ -2,6 +2,8 @@ import { useParams, useHistory } from "react-router-dom";
 
 import logoImg from "../assets/images/logo.svg";
 import deleteImg from "../assets/images/delete.svg";
+import checkImg from '../assets/images/check.svg';
+import answerImg from '../assets/images/answer.svg';
 
 import { Button } from "../components/Button";
 import { Question } from "../components/Question";
@@ -30,6 +32,14 @@ export function AdmRoom() {
 
       await questRef.remove();
     }
+  }
+
+  async function handleMarkAsAnswered(questId: string, isAnswered: boolean){
+    await database.ref(`rooms/${roomId}/questions/${questId}/isAnswered`).set(!isAnswered);
+  }
+
+  async function handleHighlightQuestion(questId: string, isHighlighted: boolean){
+    await database.ref(`rooms/${roomId}/questions/${questId}/isHighlighted`).set(!isHighlighted);
   }
 
   async function handleCloseRoom(){
@@ -67,13 +77,30 @@ export function AdmRoom() {
               key={quest.id}
               content={quest.context}
               author={quest.author}
+              isAnswered={quest.isAnswered}
+              isHighlighted={quest.isHighlighted}
             >
+              <button
+                type="button"
+                onClick={e => handleMarkAsAnswered(quest.id, quest.isAnswered)}
+              >
+                <img src={checkImg} alt="Marcar pergunta como respondida" />
+              </button>
+              {!quest.isAnswered && 
+                <button
+                  type="button"
+                  onClick={e => handleHighlightQuestion(quest.id, quest.isHighlighted)}
+                >
+                  <img src={answerImg} alt="Dara destaque à pergunta" />
+                </button>
+              }
               <button
                 type="button"
                 onClick={e => handleDeleteQuestion(quest.id)}
               >
-                <img src={deleteImg} alt="Delete question" />
+                <img src={deleteImg} alt="Deletar pergunta" />
               </button>
+              
             </Question>
           ))}
         </div>

@@ -52,6 +52,7 @@ export function Home() {
       setRoomCode('');
       return;
     }
+    // Se quem entrar for o adm ele vai para a pagina de adm
     const isAdm = (await roomRef.val().authorId) === user?.id;
     history.push(`${isAdm? '/adimin/': ''}rooms/${roomCode}`);
   }
