@@ -114,21 +114,40 @@ menu {
 
         transition: 0.2s;
 
+        svg{
+          width: 24px;
+          height: 24px;
+          margin-right: 10px;
+
+          path{
+            stroke: #29292e;
+            stroke-width: 0.2;
+          }
+        } 
+
         &:hover{
           background: var(--Hover-Gray-Light);
         }
 
-        &.exit{
-          svg{
-            width: 26px;
-            margin-right: 10px;
+        &.theme{
+
+          & select{
+            font: inherit;
           }
 
           &:hover{
             svg path{
-              stroke: red;
-              fill: red;
+              stroke: blue;
+              fill: blue;
             }
+          }
+        }
+        
+        
+        &.exit:hover{
+          svg path{
+            fill: red;
+            stroke: red;
           }
         }
       }

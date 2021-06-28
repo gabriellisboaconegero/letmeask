@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import './styles.scss';
 import menuImg from '../../assets/images/menu.svg';
 import { useAuth } from '../../hooks/UseAuth';
 
 import cx from "classnames";
 import { useHistory } from 'react-router-dom';
+import { Theme } from '../../contexts/ThemeContext';
+import { useTheme } from '../../hooks/useTheme';
 
 export function Menu(){
   const [open, setOpen] = useState(false);
   const {signOut, user, signInWithGoogle} = useAuth();
   const history = useHistory();
+  const {theme, setTheme} = useTheme();
   
 
   async function logOutAndExit(){
@@ -20,6 +23,10 @@ export function Menu(){
 
   async function signFromMenu(){
     await signInWithGoogle();
+  }
+
+  function handleSelectedTheme(e: ChangeEvent<HTMLSelectElement>){
+    setTheme(e.target.value as Theme);
   }
 
   return (
@@ -44,14 +51,28 @@ export function Menu(){
               className="menu-opt exit"
               onClick={logOutAndExit}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" ><path d="M4,12a1,1,0,0,0,1,1h7.59l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l4-4a1,1,0,0,0,.21-.33,1,1,0,0,0,0-.76,1,1,0,0,0-.21-.33l-4-4a1,1,0,1,0-1.42,1.42L12.59,11H5A1,1,0,0,0,4,12ZM17,2H7A3,3,0,0,0,4,5V8A1,1,0,0,0,6,8V5A1,1,0,0,1,7,4H17a1,1,0,0,1,1,1V19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V16a1,1,0,0,0-2,0v3a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V5A3,3,0,0,0,17,2Z" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="#29292e" fill="#29292e"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" className="bi bi-box-arrow-left" viewBox="0 0 16 16">
+              <path fillRule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+              <path fillRule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+              </svg>
               <span>Desfazer login</span>
             </div>
-            <div className="menu-opt">
-              thema
+            <div 
+              className="menu-opt theme"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" className="bi bi-sliders" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" strokeWidth="1.5"/>
+              </svg>
+              <select value={theme} name="theme" id="theme" onChange={handleSelectedTheme}>
+                <option value="light">light</option>
+                <option value="dark">dark</option>
+                <option value="solarized">solarized</option>
+                <option value="darcula">darcula</option>
+              </select>
             </div>
             <div className="menu-opt">
-              alguma coisa
+            
+            <span>{theme}</span>
             </div>
           </main>
         </div>
