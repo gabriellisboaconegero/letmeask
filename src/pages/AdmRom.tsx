@@ -31,16 +31,14 @@ export function AdmRoom() {
   // Verifica se quem entrou é o adm
   // se não coloca ele na sala normal 
   useEffect(() => {
-    // como ao recarregar a pagina ou entrar nela o usuario em primeira instancia é undefined
-    // e o authorId tbm, eu preciso fazer a verificação apenas depois dos dois serem settados
-    // porem como pode ser que o user n tenha nada, uso só o authorId como parametro
-    // Pois ele carrega depois do user, ou seja sem tem authorId, écerteza que o valor de user n vai mais mudar
-    if (authorId){
-      if (user?.id !== authorId){
+
+    database.ref(`rooms/${roomId}`).get().then(res => {
+      const data = res.val();
+      if (user?.id !== data.authorId){
         history.push(`/rooms/${roomId}`);
       }
-    }
-  }, [authorId, user?.id, roomId, history]);
+    });
+  }, [user?.id, roomId]);
 
   async function handleDeleteQuestion(questId: string){
     if (window.confirm("Tem certeza que deseja excluir essa pergunta")){

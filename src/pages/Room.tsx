@@ -22,16 +22,27 @@ export function Room() {
   const params = useParams<RoomParams>();
   const roomId = params.id;
   const [newQuestion, setNewQuestion] = useState("");
-  const { questions, title, user, signInWithGoogle, authorId } = useRoom(roomId);
+  const { 
+    questions, 
+    title, 
+    user, 
+    signInWithGoogle
+  } = useRoom(roomId);
   const history = useHistory();
 
   // Ao entrar na pagina ou logar de dentro dela, vai verificar se o usuario é 
   // O criador e colocar ele na sala de adm
   useEffect(() => {
-    if (user?.id === authorId){
-      history.push(`/adimin/rooms/${roomId}`);
-    }
-  }, [roomId, user?.id, authorId, history]);
+
+    database.ref(`rooms/${roomId}`).get().then(res => {
+      const data = res.val();
+      if (user?.id === data.authorId){
+        history.push(`/adimin/rooms/${roomId}`);
+      }else if(data.endedAt){
+        history.push('/');
+      }
+    });
+  }, [roomId, user?.id]); //
 
   async function handleCreateNewQuestion(e: FormEvent) {
     e.preventDefault();
