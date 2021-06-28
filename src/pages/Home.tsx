@@ -51,9 +51,14 @@ export function Home() {
     if (!roomRef.exists()){
       alert('sala não existe');
       return;
+    }else if(await roomRef.val().endedAt){
+      alert("Sala fechada");
+      setRoomCode('');
+      return;
     }
-
-    history.push(`rooms/${roomCode}`);
+    // Se quem entrar for o adm ele vai para a pagina de adm
+    const isAdm = (await roomRef.val().authorId) === user?.id;
+    history.push(`${isAdm? '/adimin/': ''}rooms/${roomCode}`);
   }
 
   function handleSelectedTheme(e: ChangeEvent<HTMLSelectElement>){

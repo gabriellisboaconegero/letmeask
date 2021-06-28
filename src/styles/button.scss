@@ -1,5 +1,4 @@
 .button {
-  // margin-top: 64px;
   height: 50px;
   border-radius: 8px;
   font-weight: 500;
@@ -19,7 +18,13 @@
     margin-right: 8px;
   }
 
-  &:not(:disabled)hover {
+  &.outlined{
+    background: white;
+    border: 1px solid var(--Purple);
+    color: var(--Purple);
+  }
+
+  &:not(:disabled):hover {
     filter: brightness(0.9);
   }
 
