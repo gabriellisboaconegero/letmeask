@@ -12,6 +12,7 @@ type User = {
   id: string;
   name: string;
   avatar: string;
+  email: string;
 };
 
 // o tipo AuthCntextType são quais os valores que o contexto vai receber, ou seja
@@ -50,9 +51,9 @@ export function AuthContextProvider(props: AuthContextProviderProps){
     //                  outra vez no app
     const unsubscribe = auth.onAuthStateChanged((changedUser) => {
       if (changedUser) {
-        const { displayName, photoURL, uid } = changedUser;
+        const { displayName, photoURL, uid, email } = changedUser;
 
-        if (!displayName || !photoURL) {
+        if (!displayName || !photoURL || !email) {
           throw new Error("Missing information from Google Account");
         }
 
@@ -60,6 +61,7 @@ export function AuthContextProvider(props: AuthContextProviderProps){
           id: uid,
           name: displayName,
           avatar: photoURL,
+          email
         });
       }else{
         setUser(undefined);
@@ -80,9 +82,9 @@ export function AuthContextProvider(props: AuthContextProviderProps){
     const res = await auth.signInWithPopup(provider);
 
     if (res.user) {
-      const { displayName, photoURL, uid } = res.user;
+      const { displayName, photoURL, uid, email } = res.user;
 
-      if (!displayName || !photoURL) {
+      if (!displayName || !photoURL || !email) {
         throw new Error("Missing information from Google Account");
       }
 
@@ -90,6 +92,7 @@ export function AuthContextProvider(props: AuthContextProviderProps){
         id: uid,
         name: displayName,
         avatar: photoURL,
+        email
       });
     }
   }

@@ -19,11 +19,6 @@ export function NewRoom() {
   //#region signOut
   const { signOut, user } = useAuth();
   const history = useHistory();
-
-  function signOutAndReturnToHome(){
-    signOut()
-    history.push('/');
-  }
   //#endregion
 
   //#region create new room
@@ -60,9 +55,6 @@ export function NewRoom() {
         <p>Tire dúvidas da sua audiência em tempo real</p>
       </aside>
       <main>
-        <div className="exit">
-          <button onClick={signOutAndReturnToHome}>sair</button>
-        </div>
         <div className="main-content">
           <img src={logoImg} alt="Letmeask" />
           <form onSubmit={handleCreateRoom}>

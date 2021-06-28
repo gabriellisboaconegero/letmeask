@@ -8,6 +8,8 @@ import { Room } from "./pages/Room";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import { ThemeContextProvider } from "./contexts/ThemeContext";
 import { AdmRoom } from "./pages/AdmRom";
+import { Menu } from "./components/Menu";
+
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
             <Route path='/rooms/:id' component={Room}></Route>
             <Route path='/adimin/rooms/:id' component={AdmRoom}></Route>
           </Switch>
+          <Menu />
         </BrowserRouter>
       </AuthContextProvider>
     </ThemeContextProvider>
