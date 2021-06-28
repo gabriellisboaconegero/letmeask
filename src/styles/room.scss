@@ -11,9 +11,29 @@
       justify-content: space-between;
       align-items: center;
 
-      > img {
-        max-height: 45px;
-      }
+      .logo {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--black);
+        background: none;
+        border: none;
+        cursor: pointer;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img{
+          max-height: 45px;
+          margin-right: 10px;
+
+          &[alt="Exit"]{
+            max-height: 24px;
+            margin: 0;
+            margin-bottom: 10px;
+          }
+        }
+      } 
 
       > div{
         display: flex;

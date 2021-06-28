@@ -5,6 +5,7 @@ import { useHistory, useParams } from "react-router-dom";
 import logoImg from "../assets/images/logo.svg";
 
 import { Button } from "../components/Button";
+import { Logo } from "../components/Logo";
 import { Question } from "../components/Question";
 import { RoomCode } from "../components/RoomCode";
 
@@ -94,7 +95,7 @@ export function Room() {
     <div id="page-room">
       <header>
         <div className="content">
-          <img src={logoImg} alt="Letmeask" />
+          <Logo />
           <RoomCode roomCode={roomId}></RoomCode>
         </div>
       </header>

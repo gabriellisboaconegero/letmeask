@@ -16,6 +16,7 @@ import { useRoom } from "../hooks/useRoom";
 import "../styles/room.scss";
 
 import { database } from "../services/firebase";
+import { Logo } from "../components/Logo";
 
 type RoomParams = {
   id: string;
@@ -67,8 +68,8 @@ export function AdmRoom() {
     <div id="page-room">
       <header>
         <div className="content">
-          <img src={logoImg} alt="Letmeask" />
-          <div className="">
+          <Logo />
+          <div>
             <RoomCode roomCode={roomId}></RoomCode>
             <Button 
               isOutlined
