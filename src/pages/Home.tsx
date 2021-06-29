@@ -19,6 +19,7 @@ import { useAuth } from "../hooks/UseAuth";
 import { database } from "../services/firebase";
 import Modal from "react-modal";
 
+
 export function Home() {
   const history = useHistory();
 
@@ -63,6 +64,10 @@ export function Home() {
     history.push(`${isAdm? '/adimin/': ''}rooms/${roomCode}`);
   }
 
+  // function handleSelectedTheme(e: ChangeEvent<HTMLSelectElement>){
+  //   setTheme(e.target.value as Theme);
+  // }
+
   return (
     <div id="page-auth">
       <aside>
@@ -73,6 +78,12 @@ export function Home() {
       </aside>
       <main>
         <div className="main-content">
+          {/* <h1>{theme}</h1>
+          <select name="theme" id="theme" onChange={handleSelectedTheme} defaultValue={theme}>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="solarized">Solarized</option>
+          </select> */}
           <img src={logoImg} alt="Letmeask" />
           <button className="create-room" onClick={handleCreateRoom}>
             <img src={googleIcon} alt="Google icon" />
