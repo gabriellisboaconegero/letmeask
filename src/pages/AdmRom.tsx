@@ -36,10 +36,11 @@ export function AdmRoom() {
   // Verifica se quem entrou é o adm
   // se não coloca ele na sala normal 
   useEffect(() => {
-
     database.ref(`rooms/${roomId}`).get().then(res => {
       const data = res.val();
-      if (user?.id !== data.authorId){
+      if (!user){
+        return
+      }else if (user?.id !== data.authorId){
         history.push(`/rooms/${roomId}`);
       }
     });
