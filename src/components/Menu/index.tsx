@@ -7,12 +7,35 @@ import cx from "classnames";
 import { useHistory } from 'react-router-dom';
 import { Theme } from '../../contexts/ThemeContext';
 import { useTheme } from '../../hooks/useTheme';
+import { useEffect } from 'react';
 
 export function Menu(){
   const [open, setOpen] = useState(false);
   const {signOut, user, signInWithGoogle} = useAuth();
   const history = useHistory();
   const {theme, setTheme} = useTheme();
+
+  function clickOutOfMenuEventHandler(e: MouseEvent){
+    const path = e.composedPath();
+    const menu = document.querySelector('menu#main-menu');
+    const menuInPath = path.some((target) => {
+      return menu === target;
+    });
+    
+    if (!menuInPath){
+      setOpen(false);
+    }
+  }
+
+  useEffect(() => {
+    if (open){
+      document.documentElement.addEventListener("mousedown", clickOutOfMenuEventHandler);
+    }
+
+    return () => {
+      document.documentElement.removeEventListener("mousedown", clickOutOfMenuEventHandler);
+    }
+  }, [open]);
   
 
   async function logOutAndExit(){
@@ -30,7 +53,7 @@ export function Menu(){
   }
 
   return (
-    <menu>
+    <menu id="main-menu">
       <button onClick={() => setOpen(!open)}>
         <img src={menuImg} alt="Menu" width="32px"/>
       </button> 
