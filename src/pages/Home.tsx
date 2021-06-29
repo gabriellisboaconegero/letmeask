@@ -10,17 +10,21 @@ import logoImg from "../assets/images/logo.svg";
 import googleIcon from "../assets/images/google-icon.svg";
 
 import "../styles/auth.scss";
+import "../styles/modal.scss";
 
 import { Button } from "../components/Button";
 
 import { useAuth } from "../hooks/UseAuth";
 
 import { database } from "../services/firebase";
+import Modal from "react-modal";
 
 export function Home() {
   const history = useHistory();
 
   const [roomCode, setRoomCode] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalSettings, setModalSettings] = useState('');
 
   //exemplo de como funciona o useAuth, ele retorna os dados que podemos acessar do contexto
   const { user, signInWithGoogle } = useAuth();
@@ -45,10 +49,12 @@ export function Home() {
     const roomRef = await database.ref(`rooms/${roomCode}`).get();
 
     if (!roomRef.exists()){
-      alert('sala não existe');
+      setModalOpen(true);
+      setModalSettings('non_exists');
       return;
     }else if(await roomRef.val().endedAt){
-      alert("Sala fechada");
+      setModalOpen(true);
+      setModalSettings('closed');
       setRoomCode('');
       return;
     }
@@ -84,6 +90,23 @@ export function Home() {
           </form>
         </div>
       </main>
+      <Modal 
+        isOpen={modalOpen}
+        onRequestClose={() => setModalOpen(false)}
+        className="modal"
+        overlayClassName="modal-overlay"
+      >
+        {modalSettings === 'closed'? (
+          <span>Sala fechada pelo criador</span>
+        ):(
+          <span>Sala não encontrada</span>
+        )}
+        <button onClick={() => setModalOpen(false)}>
+          <svg className="svg-icon" viewBox="0 0 20 20">
+						<path fill="#29292e" d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z"></path>
+					</svg>
+        </button>
+      </Modal>
     </div>
   );
 }
