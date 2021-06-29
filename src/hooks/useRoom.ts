@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useDebugValue, useEffect, useState } from "react";
 import { database } from "../services/firebase";
 import { useAuth } from "./UseAuth";
 
@@ -25,6 +25,16 @@ type DatabaseRoom = {
   questions: FirebaseQuestions;
   title: string;
   endedAt: string;
+  votation: {
+    content: string;
+    isClosed: boolean;
+    options: Record<string, {
+      content: string;
+      votes: Record<string, {
+        authorId: string;
+      }>
+    }>
+  };
 };
 
 type QuestionType = {
@@ -40,12 +50,25 @@ type QuestionType = {
   likeId: string | undefined;
 };
 
+type VotationType ={
+  content: string;
+  isClosed: boolean;
+  totalVotes: number;
+  voteId: string | undefined;
+  options: {
+    id: string;
+    content: string;
+    votes: number;
+  }[];
+}
+
 export function useRoom(roomId: string) {
   const { user, signInWithGoogle } = useAuth();
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [title, setTitle] = useState("");
   const [authorId, setAuthorId] = useState("");
   const [closed, setClosed] = useState("");
+  const [votation, setVotation] = useState<VotationType>({} as VotationType);
 
   useEffect(() => {
     // pega a ref da sala para poder adicionar e modificar
@@ -57,6 +80,52 @@ export function useRoom(roomId: string) {
       // diferente do .get() que pega outras coisas tambem
       const databaseRoom: DatabaseRoom = room.val();
       const firebaseQuestions = databaseRoom.questions ?? {};
+      const firebaseVotation = databaseRoom.votation ?? {};
+
+
+      let voteId: string | undefined;
+      const userVoteIdInOptions = Object.entries(firebaseVotation.options ?? {}).map(([key, value]) => {
+        return Object.entries(value.votes ?? {}).find(([key, value]) => {
+          return value.authorId === user?.id;
+        })?.[0]
+      })
+      if (userVoteIdInOptions.length !== 0){
+        voteId = userVoteIdInOptions.reduce((acc, cur) => {
+          if (cur){
+            return cur;
+          }
+          return acc;
+        });
+      }else{
+        voteId = undefined;
+      }
+
+      const parsedOptions = Object.entries(firebaseVotation.options ?? {}).map(([id, value]) => {
+        return {
+          id, 
+          content: value.content,
+          votes: Object.entries(value.votes ?? {}).length
+        }
+      });
+
+      const listOfVotesInOptions = Object.entries(firebaseVotation.options ?? {}).map(([key, value]) => {
+        return Object.entries(value.votes ?? {}).length;
+      })
+      let totalVotes: number;
+      if (listOfVotesInOptions.length !== 0){
+        totalVotes = listOfVotesInOptions.reduce((acc, cur) => acc + cur);
+      }else{
+        totalVotes = 0;
+      }
+
+
+      const parsedVotation: VotationType = {
+        content: firebaseVotation.content,
+        isClosed: firebaseVotation.isClosed,
+        totalVotes,
+        voteId,
+        options: parsedOptions
+      }
 
       //  como o valor é retornado como objeto com os ids como keys dos objetos
       // ele não vem em um lista, então precisamos mudar isso
@@ -82,6 +151,7 @@ export function useRoom(roomId: string) {
       setQuestions(parsedQuestions);
       setClosed(databaseRoom.endedAt);
       setAuthorId(databaseRoom.authorId);
+      setVotation(parsedVotation);
     });
 
     return () => {
@@ -95,6 +165,7 @@ export function useRoom(roomId: string) {
     user,
     signInWithGoogle,
     authorId,
-    closed
+    closed,
+    votation
   };
 }

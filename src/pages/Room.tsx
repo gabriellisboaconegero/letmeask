@@ -2,12 +2,11 @@ import { useEffect } from "react";
 import { useState, FormEvent } from "react";
 import { useHistory, useParams } from "react-router-dom";
 
-import logoImg from "../assets/images/logo.svg";
-
 import { Button } from "../components/Button";
 import { Logo } from "../components/Logo";
 import { Question } from "../components/Question";
 import { RoomCode } from "../components/RoomCode";
+import { Votation } from "../components/Votation";
 
 import { useRoom } from "../hooks/useRoom";
 import { database } from "../services/firebase";
@@ -27,7 +26,8 @@ export function Room() {
     questions, 
     title, 
     user, 
-    signInWithGoogle
+    signInWithGoogle,
+    votation
   } = useRoom(roomId);
   const history = useHistory();
 
@@ -91,6 +91,16 @@ export function Room() {
     }
   }
 
+  async function handleVote(optionId: string){
+    if (!user) return;
+
+    if (votation.voteId) return;
+
+    await database.ref(`rooms/${roomId}/votation/options/${optionId}/votes`).push({
+      authorId: user?.id
+    });
+  }
+
   return (
     <div id="page-room">
       <header>
@@ -102,7 +112,7 @@ export function Room() {
 
       <main>
         <div className="room-title">
-          <h1>Sala {title}</h1>
+          <h1>{title}</h1>
           {/* se não tiver pergunta não mostra quantas perguntas tem */}
           {questions.length > 0 && <span>{questions.length} pergunta(s)</span>}
         </div>
@@ -134,6 +144,10 @@ export function Room() {
         </form>
 
         <div className="question-list">
+          {(user && votation.content) && <Votation 
+            votation={votation}
+            handleVote={handleVote}
+          />}
           {questions.map((quest) => (
             <Question
               key={quest.id}

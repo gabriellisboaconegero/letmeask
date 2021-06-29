@@ -19,6 +19,8 @@ import Modal from "react-modal";
 
 import { database } from "../services/firebase";
 import { Logo } from "../components/Logo";
+import { Votation } from "../components/Votation";
+import { VotationCreator } from "../components/VotationCreator";
 
 type RoomParams = {
   id: string;
@@ -28,10 +30,11 @@ export function AdmRoom() {
   // pega os parametros que foram passados na rota, nesse cado o id da sala
   const params = useParams<RoomParams>();
   const roomId = params.id;
-  const { questions, title, user, authorId } = useRoom(roomId);
+  const { questions, title, user, authorId, votation } = useRoom(roomId);
   const history = useHistory();
   const [modalOpen, setModalOpen] = useState(false);
   const [questToDelete, setQuestToDelete] = useState('');
+  const [votationModalOpen, setVotationModalOpen] = useState(false);
 
   // Verifica se quem entrou é o adm
   // se não coloca ele na sala normal 
@@ -65,6 +68,10 @@ export function AdmRoom() {
     await database.ref(`rooms/${roomId}/questions/${questId}/isHighlighted`).set(!isHighlighted);
   }
 
+  async function openCreateVotationModal(){
+    setVotationModalOpen(true);
+  }
+
   async function handleCloseRoom(){
     await database.ref(`rooms/${roomId}`).update({
       endedAt: new Date()
@@ -95,6 +102,26 @@ export function AdmRoom() {
         </div>
 
         <div className="question-list">
+
+          <button onClick={openCreateVotationModal}>Criar votação</button>
+          <Modal
+            isOpen={votationModalOpen}
+          >
+            <VotationCreator 
+              closeCreator={() => setVotationModalOpen(false)}
+              roomId={roomId}
+            />
+          </Modal>
+          {votation.content && <Votation 
+            votation={votation}
+          >
+            <button>
+              <img src={deleteImg} alt="Deletar votação" />
+            </button>
+            <button>
+              <img src={checkImg} alt="Fechr votação" />
+            </button>
+          </Votation>}
           {questions.map((quest) => (
             <Question 
               key={quest.id}
