@@ -19,7 +19,6 @@ import Modal from "react-modal";
 
 import { database } from "../services/firebase";
 import { Logo } from "../components/Logo";
-import { Votation } from "../components/Votation";
 import { VotationCreator } from "../components/VotationCreator";
 
 type RoomParams = {
@@ -106,22 +105,22 @@ export function AdmRoom() {
           <button onClick={openCreateVotationModal}>Criar votação</button>
           <Modal
             isOpen={votationModalOpen}
+            onRequestClose={e => setVotationModalOpen(false)}
           >
             <VotationCreator 
               closeCreator={() => setVotationModalOpen(false)}
               roomId={roomId}
             />
           </Modal>
-          {votation.content && <Votation 
-            votation={votation}
-          >
-            <button>
-              <img src={deleteImg} alt="Deletar votação" />
-            </button>
-            <button>
-              <img src={checkImg} alt="Fechr votação" />
-            </button>
-          </Votation>}
+          {votation.content && 
+            <div className="votation">
+            <p>{votation.content}</p>
+              {votation.options.map(vote => (
+                  <p>{vote.content}<span>{vote.votes}</span></p>
+              ))}
+              <span>{votation.options.reduce((acc, cur) => cur.votes > acc.votes? cur: acc).content}</span>
+            </div>
+          }
           {questions.map((quest) => (
             <Question 
               key={quest.id}

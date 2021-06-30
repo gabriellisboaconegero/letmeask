@@ -30,9 +30,7 @@ type DatabaseRoom = {
     isClosed: boolean;
     options: Record<string, {
       content: string;
-      votes: Record<string, {
-        authorId: string;
-      }>
+      votes: Record<string, string>
     }>
   };
 };
@@ -54,7 +52,7 @@ type VotationType ={
   content: string;
   isClosed: boolean;
   totalVotes: number;
-  voteId: string | undefined;
+  alreadyVoted: boolean;
   options: {
     id: string;
     content: string;
@@ -83,22 +81,9 @@ export function useRoom(roomId: string) {
       const firebaseVotation = databaseRoom.votation ?? {};
 
 
-      let voteId: string | undefined;
-      const userVoteIdInOptions = Object.entries(firebaseVotation.options ?? {}).map(([key, value]) => {
-        return Object.entries(value.votes ?? {}).find(([key, value]) => {
-          return value.authorId === user?.id;
-        })?.[0]
-      })
-      if (userVoteIdInOptions.length !== 0){
-        voteId = userVoteIdInOptions.reduce((acc, cur) => {
-          if (cur){
-            return cur;
-          }
-          return acc;
-        });
-      }else{
-        voteId = undefined;
-      }
+      const alreadyVoted = Object.values(firebaseVotation.options ?? {}).some(value => {
+        return Object.values(value.votes ?? {}).includes(user?.id as string, 0);
+      }) 
 
       const parsedOptions = Object.entries(firebaseVotation.options ?? {}).map(([id, value]) => {
         return {
@@ -108,22 +93,16 @@ export function useRoom(roomId: string) {
         }
       });
 
-      const listOfVotesInOptions = Object.entries(firebaseVotation.options ?? {}).map(([key, value]) => {
-        return Object.entries(value.votes ?? {}).length;
+      let totalVotes = 0;
+      const listOfVotesInOptions = Object.values(firebaseVotation.options ?? {}).forEach(value => {
+        totalVotes += Object.values(value.votes ?? {}).length;
       })
-      let totalVotes: number;
-      if (listOfVotesInOptions.length !== 0){
-        totalVotes = listOfVotesInOptions.reduce((acc, cur) => acc + cur);
-      }else{
-        totalVotes = 0;
-      }
-
 
       const parsedVotation: VotationType = {
         content: firebaseVotation.content,
         isClosed: firebaseVotation.isClosed,
         totalVotes,
-        voteId,
+        alreadyVoted,
         options: parsedOptions
       }
 
@@ -141,7 +120,7 @@ export function useRoom(roomId: string) {
             isHighlighted: value.isHighlighted,
             likes: Object.keys(value.likes ?? {}).length,
             likeId: Object.entries(value.likes ?? {}).find(([key, like]) => {
-              return like.authorId === user?.id
+              return like.authorId === user?.id;
             })?.[0]
           };
         }

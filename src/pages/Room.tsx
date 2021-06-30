@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { useState, FormEvent } from "react";
 import { useHistory, useParams } from "react-router-dom";
 
@@ -6,7 +6,6 @@ import { Button } from "../components/Button";
 import { Logo } from "../components/Logo";
 import { Question } from "../components/Question";
 import { RoomCode } from "../components/RoomCode";
-import { Votation } from "../components/Votation";
 
 import { useRoom } from "../hooks/useRoom";
 import { database } from "../services/firebase";
@@ -22,6 +21,7 @@ export function Room() {
   const params = useParams<RoomParams>();
   const roomId = params.id;
   const [newQuestion, setNewQuestion] = useState("");
+  const [votationSelected, setVotationSelected] = useState('');
   const { 
     questions, 
     title, 
@@ -91,14 +91,16 @@ export function Room() {
     }
   }
 
-  async function handleVote(optionId: string){
+  async function handleVote(){
     if (!user) return;
 
-    if (votation.voteId) return;
+    if (votation.alreadyVoted) return;
 
-    await database.ref(`rooms/${roomId}/votation/options/${optionId}/votes`).push({
-      authorId: user?.id
-    });
+    await database.ref(`rooms/${roomId}/votation/options/${votationSelected}/votes`).push(user.id);
+  }
+
+  function handleSelectOption(e: ChangeEvent<HTMLInputElement>){
+    setVotationSelected(e.target.value);
   }
 
   return (
@@ -144,10 +146,26 @@ export function Room() {
         </form>
 
         <div className="question-list">
-          {(user && votation.content) && <Votation 
-            votation={votation}
-            handleVote={handleVote}
-          />}
+          {(user && votation.content) && (
+            <div className="votation">
+              <p>{votation.content}</p>
+              {votation.options.map(vote => (
+                <label htmlFor={vote.id} key={vote.id}>
+                  <input 
+                    onChange={handleSelectOption}
+                    type="radio" 
+                    name={votation.content} 
+                    id={vote.id} 
+                    value={vote.id} 
+                    disabled={votation.isClosed || votation.alreadyVoted}
+                  />
+                  <p>{vote.content} <span>{vote.votes}</span> </p>
+                </label>
+              ))}
+              <span>{votation.options.reduce((acc, cur) => cur.votes > acc.votes? cur: acc).content}</span>
+              <button onClick={handleVote}>enviar</button>
+            </div>
+          )}
           {questions.map((quest) => (
             <Question
               key={quest.id}
