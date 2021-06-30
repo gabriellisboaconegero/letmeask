@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import { useState, FormEvent } from "react";
 import { useHistory, useParams } from "react-router-dom";
 
-import logoImg from "../assets/images/logo.svg";
-
 import { Button } from "../components/Button";
 import { Logo } from "../components/Logo";
 import { Question } from "../components/Question";
@@ -13,6 +11,7 @@ import { useRoom } from "../hooks/useRoom";
 import { database } from "../services/firebase";
 
 import "../styles/room.scss";
+import {useTheme} from '../hooks/useTheme';
 
 type RoomParams = {
   id: string;
@@ -23,6 +22,7 @@ export function Room() {
   const params = useParams<RoomParams>();
   const roomId = params.id;
   const [newQuestion, setNewQuestion] = useState("");
+  const {theme} = useTheme();
   const { 
     questions, 
     title, 
@@ -102,7 +102,7 @@ export function Room() {
 
       <main>
         <div className="room-title">
-          <h1>Sala {title}</h1>
+          <h1>{title}</h1>
           {/* se não tiver pergunta não mostra quantas perguntas tem */}
           {questions.length > 0 && <span>{questions.length} pergunta(s)</span>}
         </div>
@@ -112,6 +112,7 @@ export function Room() {
             placeholder="oque voce quer perguntar"
             value={newQuestion}
             onChange={(e) => setNewQuestion(e.target.value)}
+            className={theme.name}
           />
 
           <div className="form-footer">

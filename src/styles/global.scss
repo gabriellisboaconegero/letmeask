@@ -1,22 +1,24 @@
 :root {
   --black: #29292e;
   --shadow: #050206;
-  --Purple: #835afd;
+  --Primary: #835afd;
   --Gradient: linear-gradient(139.44deg, #485bff 0%, #ff59f8 96.19%);
   --Danger: #e73f5d;
   --Gray-Dark: #737380;
   --Gray-Medium: #a8a8b3;
   --Gray-Light: #dbdcdd;
   --Gray-Light-Alpha: #dbdcdddc;
-  --White-Background: #f8f8f8;
-  --White-Details: #fefefe;
+  --Background: #f8f8f8;
+  --Details: #fefefe;
   --Pink-Dark: #e559f9;
   --Pink-Light: #d67ee2;
   --Hover-Purple: #6f4bd8;
   --Hover-Danger: #d73754;
   --Hover-Gray-Medium: #7e7e86;
   --Hover-Gray-Light: #cecece;
+  --Background2: none;
 }
+
 * {
   padding: 0;
   margin: 0;
@@ -24,7 +26,7 @@
 }
 
 body {
-  background: var(--White-Background);
+  background: var(--Background);
   color: var(--black);
 }
 

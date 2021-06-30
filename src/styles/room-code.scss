@@ -4,14 +4,18 @@
   overflow: hidden;
 
   background: white;
-  border: 1px solid var(--Purple);
+  border: 1px solid var(--Primary);
   cursor: pointer;
 
   display: flex;
 
+  &.dark{
+    background: var(--Gray-Light);
+  }
+
   div{
     height: 40px;
-    background: var(--Purple);
+    background: var(--Primary);
     padding: 0 12px;
     display: flex;
     justify-content: center;

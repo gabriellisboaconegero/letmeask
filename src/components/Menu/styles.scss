@@ -19,7 +19,7 @@ menu {
     height: 50px;
 
     background: var(--Gray-Light);
-    border: 2px solid var(--Purple);
+    border: 2px solid var(--Primary);
     border-radius: 16px;
 
     display: flex;
@@ -41,7 +41,7 @@ menu {
 
 
     button{
-      color: var(--Purple);
+      color: var(--Primary);
       text-decoration: underline;
       font-size: 14px;
     }
@@ -52,7 +52,7 @@ menu {
     min-height: 40vh;
 
     background: var(--Gray-Light);
-    border: 2px solid var(--Purple);
+    border: 2px solid var(--Primary);
     border-radius: 16px;
 
     position: absolute;
