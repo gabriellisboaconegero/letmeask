@@ -2,7 +2,7 @@
   height: 50px;
   border-radius: 8px;
   font-weight: 500;
-  background: var(--Purple);
+  background: var(--Primary);
   color: #fff;
   padding: 0 32px;
 
@@ -20,8 +20,13 @@
 
   &.outlined{
     background: white;
-    border: 1px solid var(--Purple);
-    color: var(--Purple);
+    border: 1px solid var(--Primary);
+    color: var(--Primary);
+  }
+
+  &.dark{
+    background: var(--Primary);
+    color: var(--black);
   }
 
   &:not(:disabled):hover {

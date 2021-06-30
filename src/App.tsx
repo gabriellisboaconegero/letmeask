@@ -10,6 +10,7 @@ import { ThemeContextProvider } from "./contexts/ThemeContext";
 import { AdmRoom } from "./pages/AdmRom";
 import { Menu } from "./components/Menu";
 
+import "./styles/global.scss";
 
 function App() {
   return (

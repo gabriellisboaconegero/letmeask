@@ -5,9 +5,9 @@ import { useAuth } from '../../hooks/UseAuth';
 
 import cx from "classnames";
 import { useHistory } from 'react-router-dom';
-import { Theme } from '../../contexts/ThemeContext';
 import { useTheme } from '../../hooks/useTheme';
 import { useEffect } from 'react';
+import Dark from '../../styles/themes/dark';
 
 export function Menu(){
   const [open, setOpen] = useState(false);
@@ -27,13 +27,23 @@ export function Menu(){
     }
   }
 
+  function handleExitByKey(e: KeyboardEvent){
+    if (e.code === 'Escape'){
+      setOpen(false);
+    }
+  }
+
   useEffect(() => {
     if (open){
       document.documentElement.addEventListener("mousedown", clickOutOfMenuEventHandler);
+      document.documentElement.addEventListener("keydown", handleExitByKey);
+
     }
 
     return () => {
       document.documentElement.removeEventListener("mousedown", clickOutOfMenuEventHandler);
+      document.documentElement.removeEventListener("keydown", handleExitByKey);
+
     }
   }, [open]);
   
@@ -49,7 +59,7 @@ export function Menu(){
   }
 
   function handleSelectedTheme(e: ChangeEvent<HTMLSelectElement>){
-    setTheme(e.target.value as Theme);
+    setTheme(e.target.value);
   }
 
   return (
@@ -86,16 +96,15 @@ export function Menu(){
               <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" className="bi bi-sliders" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" strokeWidth="1.5"/>
               </svg>
-              <select value={theme} name="theme" id="theme" onChange={handleSelectedTheme}>
+              <select value={theme.name} name="theme" id="theme" onChange={handleSelectedTheme}>
                 <option value="light">light</option>
                 <option value="dark">dark</option>
                 <option value="solarized">solarized</option>
                 <option value="darcula">darcula</option>
               </select>
             </div>
-            <div className="menu-opt">
-            
-            <span>{theme}</span>
+            <div className="menu-opt">            
+            <span>{theme.name}</span>
             </div>
           </main>
         </div>

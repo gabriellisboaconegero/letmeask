@@ -1,12 +1,12 @@
 .question{
-  background: var(--White-Details);
+  background: var(--Details);
   border-radius: 8px;
   box-shadow: 0 2px 12px rgba($color: #000000, $alpha: 0.04);
   padding: 24px;
 
   &.highlighted {
     background: #f4f8ff;
-    border: 1px solid var(--Purple);
+    border: 1px solid var(--Primary);
 
     footer .user-info span{
       color: var(--black);
@@ -67,10 +67,10 @@
         gap: 8px;
 
         &.liked{
-          color: var(--Purple);
+          color: var(--Primary);
 
           svg path{
-            stroke: var(--Purple);
+            stroke: var(--Primary);
           }
         }
       }

@@ -11,6 +11,7 @@ import { useRoom } from "../hooks/useRoom";
 import { database } from "../services/firebase";
 
 import "../styles/room.scss";
+import {useTheme} from '../hooks/useTheme';
 
 type RoomParams = {
   id: string;
@@ -22,6 +23,7 @@ export function Room() {
   const roomId = params.id;
   const [newQuestion, setNewQuestion] = useState("");
   const [votationSelected, setVotationSelected] = useState('');
+  const {theme} = useTheme();
   const { 
     questions, 
     title, 
@@ -124,6 +126,7 @@ export function Room() {
             placeholder="oque voce quer perguntar"
             value={newQuestion}
             onChange={(e) => setNewQuestion(e.target.value)}
+            className={theme.name}
           />
 
           <div className="form-footer">
