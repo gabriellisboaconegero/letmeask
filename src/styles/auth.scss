@@ -30,6 +30,10 @@
       line-height: 32px;
       margin-top: 16px;
       color: var(--Details);
+
+      &.dark{
+        color: rgb(224, 224, 224);
+      }
     }
   }
 

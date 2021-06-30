@@ -18,6 +18,7 @@ import { useAuth } from "../hooks/UseAuth";
 
 import { database } from "../services/firebase";
 import Modal from "react-modal";
+import {useTheme} from '../hooks/useTheme';
 
 
 export function Home() {
@@ -26,6 +27,7 @@ export function Home() {
   const [roomCode, setRoomCode] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSettings, setModalSettings] = useState('');
+  const {theme} = useTheme();
 
   //exemplo de como funciona o useAuth, ele retorna os dados que podemos acessar do contexto
   const { user, signInWithGoogle } = useAuth();
@@ -74,7 +76,7 @@ export function Home() {
         {/*     usar uma string na prop src não funcionaria */}
         <img src={illustrationImg} alt="Ilustração, perguntas e respostas" />
         <strong>Crie slas de Q&amp;A ao-vivo</strong>
-        <p>Tire dúvidas da sua audiência em tempo real</p>
+        <p className={theme.name}>Tire dúvidas da sua audiência em tempo real</p>
       </aside>
       <main>
         <div className="main-content">
