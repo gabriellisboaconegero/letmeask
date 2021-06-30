@@ -22,7 +22,7 @@ import { Logo } from "../components/Logo";
 
 type RoomParams = {
   id: string;
-};
+}
 
 export function AdmRoom() {
   // pega os parametros que foram passados na rota, nesse cado o id da sala
