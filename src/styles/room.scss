@@ -25,9 +25,8 @@
         align-items: center;
         justify-content: center;
 
-        img{
+        svg, img{
           max-height: 45px;
-          margin-right: 10px;
 
           &[alt="Exit"]{
             max-height: 24px;

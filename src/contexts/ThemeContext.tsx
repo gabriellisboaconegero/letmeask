@@ -24,6 +24,7 @@ type Theme = {
     "Gray-Dark": string;
     "Pink-Dark": string;
   }
+  logo: string;
 }
 
 type ThemeContextType = {

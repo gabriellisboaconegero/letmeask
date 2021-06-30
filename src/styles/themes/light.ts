@@ -1,7 +1,7 @@
 const Light = {
   name: 'light',
   colors:{
-    Primary: "inherit",
+    Primary: "#835afd",
     Background: "inherit",
     "Gray-Medium": "inherit",
     black: "inherit",
@@ -9,7 +9,8 @@ const Light = {
     Details: "inherit",
     "Gray-Dark": "inherit",
     "Pink-Dark": "inherit"
-  }
+  },
+  logo: "#485BFF"
 }
 
 export default Light;

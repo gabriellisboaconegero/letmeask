@@ -9,7 +9,8 @@ const Solarized = {
     Details: "#fbe8da",
     "Gray-Dark": "inherit",
     "Pink-Dark": "#6d72c3"
-  }
+  },
+  logo: "#ff3562"
 }
 
 export default Solarized;
