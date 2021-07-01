@@ -94,9 +94,10 @@ export function Room() {
   }
 
   async function handleVote(){
-    if (!user) return;
-
-    if (votation.alreadyVoted) return;
+    if (!user || votationSelected === '' || votation.alreadyVoted){
+      console.log(user, votationSelected, votation.alreadyVoted);
+      return;
+    }
 
     await database.ref(`rooms/${roomId}/votation/options/${votationSelected}/votes`).push(user.id);
   }
@@ -151,22 +152,33 @@ export function Room() {
         <div className="question-list">
           {(user && votation.content) && (
             <div className="votation">
-              <p>{votation.content}</p>
-              {votation.options.map(vote => (
-                <label htmlFor={vote.id} key={vote.id}>
-                  <input 
+              <div className="vote-options">
+                <p>{votation.content}</p>
+                {votation.options.map(vote => (
+                  <>
+                  <input
                     onChange={handleSelectOption}
-                    type="radio" 
-                    name={votation.content} 
-                    id={vote.id} 
-                    value={vote.id} 
-                    disabled={votation.isClosed || votation.alreadyVoted}
+                    type="radio"
+                    name={votation.content}
+                    id={vote.id}
+                    value={vote.id}
+                    disabled={votation.isClosed}
                   />
-                  <p>{vote.content} <span>{vote.votes}</span> </p>
-                </label>
-              ))}
-              <span>{votation.options.reduce((acc, cur) => cur.votes > acc.votes? cur: acc).content}</span>
-              <button onClick={handleVote}>enviar</button>
+                  <label htmlFor={vote.id} key={vote.id}>
+                    <p>{vote.content} <span>{vote.votes}</span> </p>
+                  </label>
+                  </>
+                ))}
+              </div>
+              <div className="vote-settings">
+                {votation.totalVotes !== 0 && (
+                  <>
+                  <strong>{((votation.options.reduce((acc, cur) => cur.votes > acc.votes? cur: acc).votes / votation.totalVotes) * 100).toFixed(0) + '%'}</strong>
+                    <span>{votation.options.reduce((acc, cur) => cur.votes > acc.votes? cur: acc).content}</span>
+                  </>
+                )}
+                <Button onClick={handleVote}>Enviar</Button>
+              </div>
             </div>
           )}
           {questions.map((quest) => (

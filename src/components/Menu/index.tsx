@@ -63,7 +63,7 @@ export function Menu(){
   }
 
   return (
-    <menu id="main-menu">
+    <menu id="main-menu" className={theme.name}>
       <button onClick={() => setOpen(!open)}>
         <img src={menuImg} alt="Menu" width="32px"/>
       </button> 
@@ -100,7 +100,6 @@ export function Menu(){
                 <option value="light">light</option>
                 <option value="dark">dark</option>
                 <option value="solarized">solarized</option>
-                <option value="darcula">darcula</option>
               </select>
             </div>
             <div className="menu-opt">            

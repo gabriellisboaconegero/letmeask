@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useRef } from "react";
 import { useState } from "react";
 import {createContext, ReactNode } from "react";
 import { usePermState } from "../hooks/usePermState";
@@ -15,14 +14,14 @@ type ThemeProviderProps = {
 type Theme = {
   name: string;
   colors:{
-    Primary: string;
-    Background: string;
-    "Gray-Medium": string;
-    black: string;
-    Background2: string;
-    Details: string;
-    "Gray-Dark": string;
-    "Pink-Dark": string;
+    Primary: string | undefined;
+    Background: string | undefined;
+    "Gray-Medium": string | undefined;
+    black: string | undefined;
+    Background2: string | undefined;
+    Details: string | undefined;
+    "Gray-Dark": string | undefined;
+    "Pink-Dark": string | undefined;
   }
   logo: string;
 }
@@ -46,11 +45,13 @@ export function ThemeContextProvider(props: ThemeProviderProps){
 
   const [theme, setTheme] = usePermState('letmeask_theme', Light as Theme);
 
-  const themeProviderDivRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     Object.entries(theme.colors).forEach(([varToChange, value]) => {
-      themeProviderDivRef.current?.style.setProperty("--"+varToChange, value)
+      if (!value){
+        document.documentElement.style.removeProperty('--'+varToChange);
+        return;
+      }
+      document.documentElement.style.setProperty("--"+varToChange, value);
     });
   }, [theme, themes]);
 
@@ -62,7 +63,7 @@ export function ThemeContextProvider(props: ThemeProviderProps){
 
   return (
     <ThemeContext.Provider value={{theme, setTheme:changeTheme}}>
-      <div ref={themeProviderDivRef}>
+      <div>
         {props.children}
       </div>
     </ThemeContext.Provider>

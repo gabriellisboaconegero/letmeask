@@ -20,6 +20,7 @@ import Modal from "react-modal";
 import { database } from "../services/firebase";
 import { Logo } from "../components/Logo";
 import { VotationCreator } from "../components/VotationCreator";
+import { useTheme } from "../hooks/useTheme";
 
 type RoomParams = {
   id: string;
@@ -33,6 +34,7 @@ export function AdmRoom() {
   const history = useHistory();
   const [modalOpen, setModalOpen] = useState(false);
   const [questToDelete, setQuestToDelete] = useState('');
+  const {theme} = useTheme();
   const [votationModalOpen, setVotationModalOpen] = useState(false);
 
   // Verifica se quem entrou é o adm
@@ -102,25 +104,49 @@ export function AdmRoom() {
 
         <div className="question-list">
 
-          <button onClick={openCreateVotationModal}>Criar votação</button>
+          <div className="create-votation">
+            <Button onClick={openCreateVotationModal}>Criar votação</Button>
+          </div>
           <Modal
             isOpen={votationModalOpen}
             onRequestClose={e => setVotationModalOpen(false)}
+            className={`modal-votation ${theme.name}`}
+            overlayClassName="modal-overlay"
           >
             <VotationCreator 
               closeCreator={() => setVotationModalOpen(false)}
               roomId={roomId}
             />
           </Modal>
-          {votation.content && 
+          {votation.content && (
             <div className="votation">
-            <p>{votation.content}</p>
-              {votation.options.map(vote => (
-                  <p>{vote.content}<span>{vote.votes}</span></p>
-              ))}
-              <span>{votation.options.reduce((acc, cur) => cur.votes > acc.votes? cur: acc).content}</span>
+              <div className="vote-options">
+                <p>{votation.content}</p>
+                {votation.options.map(vote => (
+                  <>
+                  <input
+                    type="radio"
+                    name={votation.content}
+                    id={vote.id}
+                    value={vote.id}
+                    disabled={votation.isClosed}
+                  />
+                  <label htmlFor={vote.id} key={vote.id}>
+                    <p>{vote.content} <span>{vote.votes}</span> </p>
+                  </label>
+                  </>
+                ))}
+              </div>
+              <div className="vote-settings adm">
+                {votation.totalVotes !== 0 && (                  
+                  <span>
+                    {votation.options.reduce((acc, cur) => cur.votes > acc.votes? cur: acc).content}
+                    <strong>{((votation.options.reduce((acc, cur) => cur.votes > acc.votes? cur: acc).votes / votation.totalVotes) * 100).toFixed(0) + '%'}</strong>
+                  </span>
+                )}
+              </div>
             </div>
-          }
+          )}
           {questions.map((quest) => (
             <Question 
               key={quest.id}

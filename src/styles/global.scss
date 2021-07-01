@@ -8,7 +8,7 @@
   --Gray-Medium: #a8a8b3;
   --Gray-Light: #dbdcdd;
   --Gray-Light-Alpha: #dbdcdddc;
-  --Background: #f8f8f8;
+  --Background: #f3f3f3;
   --Details: #fefefe;
   --Pink-Dark: #e559f9;
   --Pink-Light: #d67ee2;
@@ -16,7 +16,7 @@
   --Hover-Danger: #d73754;
   --Hover-Gray-Medium: #7e7e86;
   --Hover-Gray-Light: #cecece;
-  --Background2: none;
+  --Background2: #E0E0E0;
 }
 
 * {
@@ -29,11 +29,6 @@
 body {
   background: var(--Background);
   color: var(--black);
-}
-
-html, body, #root, #root > div{
-  width: 100%;
-  height: 100%;
 }
 
 body,

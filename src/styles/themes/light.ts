@@ -2,13 +2,13 @@ const Light = {
   name: 'light',
   colors:{
     Primary: "#835afd",
-    Background: "inherit",
-    "Gray-Medium": "inherit",
-    black: "inherit",
-    Background2: "inherit",
-    Details: "inherit",
-    "Gray-Dark": "inherit",
-    "Pink-Dark": "inherit"
+    Background: undefined,
+    "Gray-Medium": undefined,
+    black: undefined,
+    Background2: undefined,
+    Details: undefined,
+    "Gray-Dark": undefined,
+    "Pink-Dark": undefined
   },
   logo: "#485BFF"
 }

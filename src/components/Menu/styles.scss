@@ -6,6 +6,12 @@ menu {
   z-index: 9999;
   font-family: "Poppins", sans-serif;
   font-weight: 500;
+  --bc: var(--Gray-Light);
+
+  &.dark{
+    color: #29292e;
+    --bc: var(--Gray-Dark);
+  }
 
   button{
     border: none;
@@ -18,7 +24,8 @@ menu {
     width: 200px;
     height: 50px;
 
-    background: var(--Gray-Light);
+    background: var(--bc);
+
     border: 2px solid var(--Primary);
     border-radius: 16px;
 
@@ -51,7 +58,8 @@ menu {
     min-width: 20vw;
     min-height: 40vh;
 
-    background: var(--Gray-Light);
+    background: var(--bc);
+
     border: 2px solid var(--Primary);
     border-radius: 16px;
 

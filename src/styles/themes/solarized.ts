@@ -3,11 +3,11 @@ const Solarized = {
   colors:{
     Primary: "#72315c",
     Background: "#f9dec9",
-    "Gray-Medium": "inherit",
-    black: "inherit",
+    "Gray-Medium": undefined,
+    black: undefined,
     Background2: "#f5c5a3",
     Details: "#fbe8da",
-    "Gray-Dark": "inherit",
+    "Gray-Dark": undefined,
     "Pink-Dark": "#6d72c3"
   },
   logo: "#ff3562"
