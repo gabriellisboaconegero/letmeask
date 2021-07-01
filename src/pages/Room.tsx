@@ -51,11 +51,8 @@ export function Room() {
     e.preventDefault();
 
     //  Se n tiver pergunta ou nã estiver cadastrado n cria oergunta
-    if (newQuestion.trim() === "") {
+    if (newQuestion.trim() === "" || !user) {
       return;
-    }
-    if (!user) {
-      throw new Error("Please log in to ask");
     }
 
     const question = {
